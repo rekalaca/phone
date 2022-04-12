@@ -21,6 +21,23 @@ const fs = require('fs');
 const res = require('express/lib/response');
 app.use(bodyParser.json());
 
+//Create
+app.post('/phones', bodyParser.json(), (req, res) => {
+    const newPhone = {
+        id: req.body.id,
+        gyarto: req.body.gyarto,
+        modell: req.body.modell,
+    };
+
+    fs.readFile('./data/phones.json', (err, file) => {
+        const phones = JSON.parse(file);
+        phones.push(newPhone);
+        fs.writeFile('./data/phones.json', JSON.stringify(phones), (err) => {
+            res.send(newPhone);
+        })
+    })
+});
+
 
 //Read
 app.get('/phones', (req, res) => {
@@ -92,24 +109,7 @@ app.delete('/phones/:id', (req, res) => {
 
 })
 
-/* app.post('/phones', bodyParser.json(), (req, res) => {
-    const newPhone = {
-        id: req.body.id,
-        gyarto: req.body.gyarto,
-        modell: req.body.modell,
-    };
-
-    fs.readFile('./data/phones.json', (err, file) => {
-        const phones = JSON.parse(file);
-        phones.push(newPhone);
-        fs.writeFile('./data/phones.json', JSON.stringify(phones), (err) => {
-            res.send(newPhone);
-        })
-    })
-});
-
-
-const getPhones = (q, res, next) => {
+/* const getPhones = (q, res, next) => {
     return res.json(phones);
 }
 
@@ -147,8 +147,8 @@ app.get("/phone/:pid", getOnePhone);
 app.put("/phone", addNewPhone);
 app.delete("/phone/:pid", deletePhone);
 app.patch("/phone/:pid", updatePhone);
-app.post("/phone/search", searchPhone); */
-
+app.post("/phone/search", searchPhone);
+ */
 app.listen(port, () => {
     console.log(`A szerver elindult a ${port} porton.`)
 })
